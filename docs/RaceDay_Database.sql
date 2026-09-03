@@ -1,7 +1,8 @@
 
 -- RaceDay Database
 -- Section C: SQL Database Script
-
+-- Purpose: Creates and populates the RaceDay database
+-- Entities :User, Event, EventType, Category, Enrolment, Result
 
 -- Create the RaceDay database
 CREATE DATABASE RaceDay;
