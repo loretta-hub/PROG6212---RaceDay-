@@ -22,3 +22,14 @@ The RaceDay project will use the following technologies and tools:
 - GitHub and GitHub Actions for source control and CI/CD.
 - Azure Blob Storage for file storage in Part 3.
 - Docker for containerisation in Part 3.
+## Project Structure
+
+The RaceDay project is organised into different sections to keep the system easy to manage and maintain.
+
+- **API** – Contains the RESTful API and backend functionality.
+- **Models** – Contains the data models used by the system.
+- **Controllers** – Handles API requests and application logic.
+- **Data** – Contains database-related functionality and configuration.
+- **Views** – Contains the user interface pages for the web application.
+- **Tests** – Contains unit tests used to verify that the system works correctly.
+- **Docs** – Contains project documentation and supporting diagrams.
