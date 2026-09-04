@@ -388,5 +388,19 @@ SELECT * FROM Category;
 
 SELECT * FROM Enrolment;
 
+
+
+-- Verification Queries
+
+SELECT 'Users' AS TableName, COUNT(*) AS RecordCount FROM [User]
+UNION ALL
+SELECT 'Events', COUNT(*) FROM Event
+UNION ALL
+SELECT 'Categories', COUNT(*) FROM Category
+UNION ALL
+SELECT 'Enrolments', COUNT(*) FROM Enrolment
+UNION ALL
+SELECT 'Results', COUNT(*) FROM Result;
+
 SELECT * FROM Result;
 GO
