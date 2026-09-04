@@ -30,3 +30,9 @@ The project documentation is organised in the `Docs` folder. It contains the pla
 - `RaceDay ERD.pdf` – Database Entity Relationship Diagram.
 - `API_Endpoint_Plan.md` – RESTful API endpoint planning document.
 - `RaceDay_Database.sql` – SQL Server database creation and population script.
+- 
+- ## Database
+
+The RaceDay system uses SQL Server to store and manage information related to events, categories, participants and race results.
+
+The database design is documented in the RaceDay ERD, while the `RaceDay_Database.sql` file contains the SQL script used to create and populate the database.
