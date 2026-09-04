@@ -36,3 +36,11 @@ The project documentation is organised in the `Docs` folder. It contains the pla
 The RaceDay system uses SQL Server to store and manage information related to events, categories, participants and race results.
 
 The database design is documented in the RaceDay ERD, while the `RaceDay_Database.sql` file contains the SQL script used to create and populate the database.
+
+## RESTful API
+
+The RaceDay system will provide a RESTful API to allow the application to manage and access race event information.
+
+The API will support operations such as viewing events, managing event categories, registering participants and accessing race results. The planned endpoints are documented in the `API_Endpoint_Plan.md` file.
+
+The RESTful API will be developed in Part 2 of the project.
