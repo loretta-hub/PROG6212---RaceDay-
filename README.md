@@ -40,3 +40,8 @@ A GitHub Actions workflow will be used to validate the required project structur
 ## Video Presentation
 
 YouTube video link will be added after the Part 1 presentation has been recorded.
+## Part 1 Status
+
+The Part 1 planning documents have been completed and added to the `/docs` folder.
+
+The GitHub Actions workflow also validates that the required Part 1 documentation files are present in the repository.
