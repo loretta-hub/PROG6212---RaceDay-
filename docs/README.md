@@ -44,3 +44,9 @@ The RaceDay system will provide a RESTful API to allow the application to manage
 The API will support operations such as viewing events, managing event categories, registering participants and accessing race results. The planned endpoints are documented in the `API_Endpoint_Plan.md` file.
 
 The RESTful API will be developed in Part 2 of the project.
+
+## Organiser
+
+Organisers are responsible for managing RaceDay events. They can create and manage events, set up event categories and manage participant results.
+
+The Organiser role helps ensure that event information and results are kept accurate and up to date.
