@@ -50,3 +50,9 @@ The RESTful API will be developed in Part 2 of the project.
 Organisers are responsible for managing RaceDay events. They can create and manage events, set up event categories and manage participant results.
 
 The Organiser role helps ensure that event information and results are kept accurate and up to date.
+
+## Participant
+
+Participants can browse available RaceDay events, view event and category information, enter events and track their race results.
+
+The Participant role provides users with access to their event participation and performance history.
