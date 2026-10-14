@@ -57,5 +57,19 @@ The RaceDay Support API provides backend functionality for the running, walking 
 - Apply validation and appropriate HTTP responses.
 - Verify API functionality through testing.
 
+- ## API Testing and Validation
+
+The RaceDay Support API must be tested to ensure that its endpoints behave as expected.
+
+### Testing considerations
+- Verify that valid requests return the expected responses.
+- Check that invalid input is handled appropriately.
+- Confirm that missing or incorrect authentication is rejected where required.
+- Verify that organiser and participant permissions are enforced.
+- Check that unsuccessful requests return appropriate HTTP status codes.
+- Confirm that API endpoints operate correctly with the configured database.
+
+Testing helps identify errors, improve reliability and ensure that the API meets the functional requirements of the RaceDay platform.
+
 ### Development status
 The API project builds successfully. Development and testing will continue as the endpoints and supporting functionality are completed.
