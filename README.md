@@ -45,3 +45,17 @@ YouTube video link will be added after the Part 1 presentation has been recorded
 The Part 1 planning documents have been completed and added to the `/docs` folder.
 
 The GitHub Actions workflow also validates that the required Part 1 documentation files are present in the repository.
+## Part 2: Support API Development
+
+The RaceDay Support API provides backend functionality for the running, walking and cycling event platform.
+
+### Development objectives
+- Provide endpoints for user registration, login and profile management.
+- Support event and category management.
+- Allow participants to manage event enrolments.
+- Support the capture and retrieval of event results.
+- Apply validation and appropriate HTTP responses.
+- Verify API functionality through testing.
+
+### Development status
+The API project builds successfully. Development and testing will continue as the endpoints and supporting functionality are completed.
