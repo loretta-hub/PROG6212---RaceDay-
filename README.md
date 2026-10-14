@@ -68,6 +68,19 @@ The RaceDay Support API must be tested to ensure that its endpoints behave as ex
 - Verify that organiser and participant permissions are enforced.
 - Check that unsuccessful requests return appropriate HTTP status codes.
 - Confirm that API endpoints operate correctly with the configured database.
+## API Security and Access Control
+
+Security is an important requirement of the RaceDay Support API because the platform supports both organisers and participants.
+
+### Security requirements
+- Authenticate users before allowing access to protected endpoints.
+- Apply role-based authorization to restrict access to organiser and participant functions.
+- Validate incoming data before processing requests.
+- Avoid exposing passwords or other sensitive information in API responses.
+- Return appropriate HTTP status codes for unauthorized and forbidden requests.
+- Handle errors without exposing internal application details.
+
+Organisers should only access functions permitted by their role, while participants should only access their own enrolments and results where applicable.
 
 Testing helps identify errors, improve reliability and ensure that the API meets the functional requirements of the RaceDay platform.
 
