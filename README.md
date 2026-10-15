@@ -259,3 +259,18 @@ The RaceDay Support API is organised into components that separate request handl
 This separation helps keep the application organised and makes the code easier to maintain.
 
 The listed components should be checked against the actual project folders before submission.
+
+## Part 2 Completion and Verification
+
+Part 2 focuses on developing the RaceDay Support API to support event management, participant enrolments, results and user-related functionality.
+
+### Verification Checklist
+- [ ] Confirm that the API builds successfully.
+- [ ] Verify the database connection and required database configuration.
+- [ ] Test the implemented endpoints using Swagger.
+- [ ] Verify authentication and role-based access where implemented.
+- [ ] Run the available automated tests.
+- [ ] Confirm that the GitHub Actions workflow completes successfully.
+- [ ] Review the README and supporting documentation before submission.
+
+The checklist should be updated as each item is verified. The final submission should accurately reflect the functionality implemented and tested in the project.
