@@ -244,3 +244,18 @@ GitHub Actions is used to automate validation of the RaceDay repository.
 A successful workflow run is indicated by a green check mark in GitHub Actions. Failed runs should be investigated using the workflow logs.
 
 The workflow configuration should be reviewed to confirm which checks are performed. A successful run only verifies the steps included in that workflow.
+
+## Project Structure
+
+The RaceDay Support API is organised into components that separate request handling, data models and application configuration.
+
+### Main Components
+- **Controllers:** Handle incoming API requests and return responses.
+- **Models:** Represent the data used by the application.
+- **Services:** Contain supporting application logic where implemented.
+- **Application configuration:** Stores settings required to run the API.
+- **Documentation:** Contains project planning documents and supporting references.
+
+This separation helps keep the application organised and makes the code easier to maintain.
+
+The listed components should be checked against the actual project folders before submission.
