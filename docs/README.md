@@ -147,3 +147,9 @@ The source code and project documentation are maintained in the RaceDay GitHub r
 
 ## Demonstration Video
 The demonstration should show the running API, Swagger endpoints, authentication, role-based access, database integration and automated tests.
+
+## Part 2 – API Continuous Integration
+
+The RaceDay Part 2 API uses GitHub Actions to automate the build and testing process. The workflow is located at `.github/workflows/raceday-api.yml` and is configured to run when changes are pushed to the `part2-api` branch.
+
+The workflow restores project dependencies, builds the API and runs the automated unit tests.
