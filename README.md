@@ -84,5 +84,10 @@ Organisers should only access functions permitted by their role, while participa
 
 Testing helps identify errors, improve reliability and ensure that the API meets the functional requirements of the RaceDay platform.
 
-### Development status
-The API project builds successfully. Development and testing will continue as the endpoints and supporting functionality are completed.
+### Development Status
+
+- The RaceDay Support API builds successfully.
+- The API project is configured to use SQL Server and Entity Framework Core.
+- API endpoints can be explored using Swagger.
+- GitHub Actions is used to validate the project through continuous integration.
+- Further development and testing will be completed according to the Part 2 requirements.
