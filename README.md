@@ -158,3 +158,17 @@ The following table summarises the 25 planned API endpoints.
 Endpoints must enforce appropriate authentication and role-based authorisation. Input validation and suitable HTTP status codes should be used to support reliable API operations.
 
 The endpoint reference must be checked against the implemented controllers and the Part 1 API Endpoint Plan. Planned endpoints are not considered implemented until their functionality has been developed and tested.
+
+## Database Configuration
+
+The RaceDay Support API uses SQL Server for data storage and Entity Framework Core to support database operations.
+
+### Database Setup
+- **Database provider:** SQL Server
+- **ORM:** Entity Framework Core
+- **Configuration:** The database connection string is maintained in the application configuration.
+- **Database operations:** The API uses its data models and database context to manage RaceDay information.
+
+The database configuration should be checked before running the API. Connection strings and other sensitive credentials should not be committed to the public repository.
+
+Database connectivity and data operations should be verified during testing.
