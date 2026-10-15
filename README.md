@@ -193,3 +193,20 @@ Before running the API, ensure that the following are installed:
 
 ### Troubleshooting
 If the API fails to start, check the build output, database connection settings and application logs.
+
+## API Responses and HTTP Status Codes
+
+The RaceDay Support API uses HTTP status codes to communicate the outcome of client requests.
+
+| Status Code | Meaning | Example Use |
+|---|---|---|
+| 200 OK | Request completed successfully | Retrieving event information |
+| 201 Created | A resource was created successfully | Registering a user or creating an event |
+| 204 No Content | Request succeeded without returning a response body | Deleting a resource |
+| 400 Bad Request | Request contains invalid data | Submitting invalid input |
+| 401 Unauthorized | Authentication is required or invalid | Accessing a protected endpoint without valid authentication |
+| 403 Forbidden | The user is not permitted to perform the action | Accessing an organiser-only function as a participant |
+| 404 Not Found | Requested resource could not be found | Retrieving a non-existent event |
+| 500 Internal Server Error | An unexpected server error occurred | An unhandled application error |
+
+The actual status code returned depends on the endpoint implementation and the outcome of the request. API testing should verify that responses are appropriate for successful requests, invalid input, missing resources and access-control failures.
