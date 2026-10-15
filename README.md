@@ -172,3 +172,24 @@ The RaceDay Support API uses SQL Server for data storage and Entity Framework Co
 The database configuration should be checked before running the API. Connection strings and other sensitive credentials should not be committed to the public repository.
 
 Database connectivity and data operations should be verified during testing.
+
+## Running the RaceDay Support API
+
+### Prerequisites
+Before running the API, ensure that the following are installed:
+- Visual Studio with ASP.NET Core development tools.
+- The .NET SDK version required by the project.
+- SQL Server.
+- The database configured for the RaceDay API.
+
+### Steps
+1. Clone the RaceDay repository.
+2. Open the RaceDay API project or solution in Visual Studio.
+3. Check the database connection string in the application configuration.
+4. Ensure that SQL Server is running and the database is configured.
+5. Build the project to check for compilation errors.
+6. Run the API using Visual Studio.
+7. Open the Swagger interface to explore the available endpoints.
+
+### Troubleshooting
+If the API fails to start, check the build output, database connection settings and application logs.
