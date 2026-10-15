@@ -228,3 +228,19 @@ The RaceDay Support API should be tested to verify that its endpoints operate co
 Swagger can be used to send requests to the API and inspect responses. Automated tests should be run where they are available in the project.
 
 Testing results should be recorded accurately, and any identified defects should be corrected before submission.
+
+
+## Continuous Integration (CI/CD)
+
+GitHub Actions is used to automate validation of the RaceDay repository.
+
+### Workflow Objectives
+- Run automated checks when changes are pushed to the repository or pull requests are created, according to the workflow configuration.
+- Identify build or validation problems early.
+- Provide workflow results through the GitHub Actions interface.
+- Support consistent project maintenance throughout development.
+
+### Workflow Verification
+A successful workflow run is indicated by a green check mark in GitHub Actions. Failed runs should be investigated using the workflow logs.
+
+The workflow configuration should be reviewed to confirm which checks are performed. A successful run only verifies the steps included in that workflow.
