@@ -210,3 +210,21 @@ The RaceDay Support API uses HTTP status codes to communicate the outcome of cli
 | 500 Internal Server Error | An unexpected server error occurred | An unhandled application error |
 
 The actual status code returned depends on the endpoint implementation and the outcome of the request. API testing should verify that responses are appropriate for successful requests, invalid input, missing resources and access-control failures.
+
+## API Testing
+
+The RaceDay Support API should be tested to verify that its endpoints operate correctly and meet the project requirements.
+
+### Testing Areas
+- **Endpoint availability:** Confirm that the implemented endpoints are accessible.
+- **Successful requests:** Check that valid requests return appropriate responses.
+- **Input validation:** Verify how the API handles missing or invalid data.
+- **Database operations:** Check that supported create, read, update and delete operations work correctly.
+- **Authentication:** Verify that protected endpoints require valid authentication where applicable.
+- **Authorisation:** Check that users can only perform actions permitted by their roles.
+- **Error handling:** Confirm that unsuccessful requests return suitable HTTP status codes.
+
+### Testing Tools
+Swagger can be used to send requests to the API and inspect responses. Automated tests should be run where they are available in the project.
+
+Testing results should be recorded accurately, and any identified defects should be corrected before submission.
