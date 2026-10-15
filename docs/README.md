@@ -56,3 +56,94 @@ The Organiser role helps ensure that event information and results are kept accu
 Participants can browse available RaceDay events, view event and category information, enter events and track their race results.
 
 The Participant role provides users with access to their event participation and performance history.
+
+# Part 2: RaceDay Web API
+
+## Project Overview
+
+Part 2 implements the RaceDay event management system as an ASP.NET Core Web API. The API provides functionality for organisers to manage sporting events, categories and participant results, while participants can register, log in, browse events and manage their enrolments.
+
+## Technologies Used
+
+- C#
+- ASP.NET Core Web API
+- Entity Framework Core
+- Microsoft SQL Server
+- Swagger / OpenAPI
+- xUnit for unit testing
+- GitHub Actions for continuous integration
+
+## Main Features
+
+### Authentication and User Profiles
+- User registration and login.
+- Password hashing.
+- Organiser and Participant roles.
+- Viewing and updating user profiles.
+- Session-based authentication and access control.
+
+### Event Management
+- View all events.
+- View an individual event.
+- Create, update and delete events.
+- Manage event categories.
+
+### Participant Enrolments
+- Enrol participants in events.
+- View enrolments.
+- Prevent duplicate enrolments.
+- Restrict access to enrolment information.
+
+### Results Management
+- Record participant finishing times and positions.
+- View event results.
+- Update and delete results subject to access permissions.
+
+## Database
+
+The API uses Microsoft SQL Server with Entity Framework Core.
+
+The database includes the following main entities:
+
+- User
+- Event
+- EventType
+- Category
+- Enrolment
+- Result
+
+The database structure follows the relationships established during Part 1.
+
+## Running the API
+
+1. Open the RaceDay solution in Visual Studio.
+2. Check the SQL Server connection string in `appsettings.json`.
+3. Ensure SQL Server is running and the configured database is available.
+4. Restore the NuGet packages.
+5. Build the solution.
+6. Set `RaceDay.API` as the startup project.
+7. Run the application.
+8. Open the Swagger interface to explore and test the API endpoints.
+
+Do not commit real passwords, database credentials or other secrets to the repository.
+
+## Testing
+
+The project includes an automated unit test project named `RaceDay.API.Tests`.
+
+Tests can be run in Visual Studio using Test Explorer by selecting **Test → Run All Tests**.
+
+The project should be built and tested before submission.
+
+## Continuous Integration
+
+GitHub Actions is configured to build the RaceDay API and run the configured unit tests when changes are pushed to the Part 2 branch.
+
+The workflow is stored under `.github/workflows/`.
+
+## Repository
+
+The source code and project documentation are maintained in the RaceDay GitHub repository.
+
+## Demonstration Video
+The demonstration should show the running API, Swagger endpoints, authentication, role-based access, database integration and automated tests.
