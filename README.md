@@ -91,3 +91,70 @@ Testing helps identify errors, improve reliability and ensure that the API meets
 - API endpoints can be explored using Swagger.
 - GitHub Actions is used to validate the project through continuous integration.
 - Further development and testing will be completed according to the Part 2 requirements.
+
+- ## Part 2: API Endpoint Reference
+
+The RaceDay Support API is designed to provide backend services for authentication, user profiles, event management, categories, participant enrolments and results.
+
+The following table summarises the 25 planned API endpoints.
+
+### Authentication — 2 endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Authenticate a user |
+
+### User Profiles — 2 endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/users/profile` | Retrieve the authenticated user's profile |
+| PUT | `/api/users/profile` | Update the authenticated user's profile |
+
+### Events — 5 endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/events` | Retrieve all events |
+| GET | `/api/events/{id}` | Retrieve a specific event |
+| POST | `/api/events` | Create an event |
+| PUT | `/api/events/{id}` | Update an event |
+| DELETE | `/api/events/{id}` | Delete an event |
+
+### Categories — 5 endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/events/{eventId}/categories` | Retrieve categories for an event |
+| GET | `/api/categories/{id}` | Retrieve a specific category |
+| POST | `/api/categories` | Create a category |
+| PUT | `/api/categories/{id}` | Update a category |
+| DELETE | `/api/categories/{id}` | Delete a category |
+
+### Enrolments — 5 endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/enrolments` | Retrieve enrolments |
+| GET | `/api/events/{eventId}/enrolments` | Retrieve enrolments for an event |
+| GET | `/api/enrolments/{id}` | Retrieve a specific enrolment |
+| POST | `/api/enrolments` | Enrol a participant in an event |
+| DELETE | `/api/enrolments/{id}` | Cancel an enrolment |
+
+### Results — 6 endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/results` | Retrieve results |
+| GET | `/api/results/{id}` | Retrieve a specific result |
+| GET | `/api/events/{eventId}/results` | Retrieve results for an event |
+| POST | `/api/results` | Capture a result |
+| PUT | `/api/results/{id}` | Update a result |
+| DELETE | `/api/results/{id}` | Delete a result |
+
+### Endpoint Security and Validation
+
+Endpoints must enforce appropriate authentication and role-based authorisation. Input validation and suitable HTTP status codes should be used to support reliable API operations.
+
+The endpoint reference must be checked against the implemented controllers and the Part 1 API Endpoint Plan. Planned endpoints are not considered implemented until their functionality has been developed and tested.
