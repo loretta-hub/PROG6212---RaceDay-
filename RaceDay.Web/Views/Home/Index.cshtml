@@ -1,8 +1,73 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <div class="p-5 mb-4 rounded-4 text-white"
+         style="background: linear-gradient(135deg, #123c69, #087e8b);">
+        <div class="container-fluid py-4">
+            <h1 class="display-3 fw-bold">Welcome to RaceDay</h1>
+
+            <p class="fs-4 mt-3">
+                Your journey. Your challenge. Your finish line.
+            </p>
+
+            <p class="lead">
+                Discover running, walking and cycling events,
+                register to participate, and track your race results.
+            </p>
+
+            <a href="#race-options"
+               class="btn btn-light btn-lg fw-bold mt-3">
+                Explore RaceDay
+            </a>
+        </div>
+    </div>
+
+    <div id="race-options" class="row g-4 mt-3">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="card-title"> Discover Events</h3>
+                    <p class="card-text">
+                        Explore upcoming running, walking and cycling events.
+                    </p>
+                    <a href="/Events"
+                       class="btn btn-primary">
+                        Browse Events
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="card-title"> Join RaceDay</h3>
+                    <p class="card-text">
+                        Create an account and get ready for your next challenge.
+                    </p>
+                    <a href="/Account/Register"
+                       class="btn btn-success">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="card-title"> Welcome Back</h3>
+                    <p class="card-text">
+                        Sign in to manage your events, entries and results.
+                    </p>
+                    <a href="/Account/Login"
+                       class="btn btn-outline-primary">
+                        Log In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
