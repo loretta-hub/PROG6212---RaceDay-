@@ -12,25 +12,20 @@ namespace RaceDay.Web.Services
             _httpClient = httpClient;
         }
 
+        public async Task<HttpResponseMessage> PostAsync<TRequest>(
+            string endpoint,
+            TRequest data)
+        {
+            return await _httpClient.PostAsJsonAsync(endpoint, data);
+        }
+
         public async Task<T?> GetAsync<T>(string endpoint)
         {
-            var response = await _httpClient.GetAsync(endpoint);
+            using var response = await _httpClient.GetAsync(endpoint);
 
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<T>();
         }
-
-        public async Task<TResponse?> PostAsync<TRequest, TResponse>(
-            string endpoint,
-            TRequest data)
-        {
-            var response = await _httpClient.PostAsJsonAsync(endpoint, data);
-
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadFromJsonAsync<TResponse>();
-        }
     }
 }
-
