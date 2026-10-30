@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Organiser Dashboard";
+}
+
+<div class="container py-5">
+
+    <div class="mb-5">
+        <h1 class="fw-bold">Organiser Dashboard</h1>
+
+        <p class="text-muted">
+            Welcome, @ViewBag.FirstName!
+            Manage your RaceDay events from one place.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Events -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold"> Events</h4>
+
+                    <p class="text-muted">
+                        Create, update and manage running,
+                        walking and cycling events.
+                    </p>
+
+                    <a asp-controller="Events"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Manage Events
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold"> Categories</h4>
+
+                    <p class="text-muted">
+                        Manage event categories and
+                        participant options.
+                    </p>
+
+                    <a href="#"
+                       class="btn btn-outline-primary">
+                        Manage Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrolments -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold"> Enrolments</h4>
+
+                    <p class="text-muted">
+                        View participants who have
+                        entered your events.
+                    </p>
+
+                    <a href="#"
+                       class="btn btn-outline-primary">
+                        View Enrolments
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold">🏆 Results</h4>
+
+                    <p class="text-muted">
+                        Capture and publish event results.
+                    </p>
+
+                    <a href="#"
+                       class="btn btn-outline-primary">
+                        Manage Results
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

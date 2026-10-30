@@ -1,0 +1,68 @@
+﻿@model RaceDay.Web.Models.EventViewModel
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div class="container py-5">
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary mb-4">
+        ← Back to Events
+    </a>
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+            <h1 class="fw-bold mb-3">
+                @Model.Name
+            </h1>
+
+            <p class="text-muted mb-4">
+                @Model.Description
+            </p>
+
+            <hr />
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <h6 class="text-muted">Event Date</h6>
+                    <p class="fw-bold">
+                        @Model.EventDate.ToString("dd MMMM yyyy")
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="text-muted">Location</h6>
+                    <p class="fw-bold">
+                        @Model.Location
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="text-muted">Distance</h6>
+                    <p class="fw-bold">
+                        @Model.Distance km
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="text-muted">Event ID</h6>
+                    <p class="fw-bold">
+                        @Model.EventID
+                    </p>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <p class="text-muted">
+                Get ready to take part in this RaceDay challenge!
+            </p>
+
+        </div>
+    </div>
+
+</div>
