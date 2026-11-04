@@ -30,5 +30,14 @@ namespace RaceDay.Web.Models
         [Range(1, int.MaxValue)]
         [Display(Name = "Event Type")]
         public int EventTypeID { get; set; }
+
+        public List<EventTypeOption> EventTypes { get; set; } = new();
+    }
+
+    public class EventTypeOption
+    {
+        public int EventTypeID { get; set; }
+
+        public string TypeName { get; set; } = string.Empty;
     }
 }

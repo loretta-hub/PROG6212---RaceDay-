@@ -16,6 +16,22 @@ namespace RaceDay.API.Controllers
         private readonly RaceDayDbContext _db;
         public EventsController(RaceDayDbContext db) => _db = db;
 
+        [HttpGet("types")]
+        public async Task<IActionResult> GetEventTypes()
+        {
+            var eventTypes = await _db.EventTypes
+                .AsNoTracking()
+                .OrderBy(x => x.TypeName)
+                .Select(x => new
+                {
+                    x.EventTypeID,
+                    x.TypeName
+                })
+                .ToListAsync();
+
+            return Ok(eventTypes);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll() =>
             Ok(await _db.Events.AsNoTracking().ToListAsync());
