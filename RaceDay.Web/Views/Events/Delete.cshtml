@@ -1,0 +1,60 @@
+﻿@model RaceDay.Web.Models.EventViewModel
+
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    <h1 class="text-danger mb-3">Delete Event</h1>
+
+                    <p>
+                        Are you sure you want to delete this event?
+                    </p>
+
+                    <h4>@Model.Name</h4>
+
+                    <p class="text-muted">
+                        @Model.Location
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+                        @Model.EventDate.ToString("dd MMMM yyyy")
+                    </p>
+
+                    <p>
+                        <strong>Distance:</strong>
+                        @Model.Distance km
+                    </p>
+
+                    <div class="alert alert-warning">
+                        Events with existing categories or enrolments cannot
+                        be deleted.
+                    </div>
+
+                    <form asp-action="DeleteConfirmed"
+                          asp-route-id="@Model.EventID"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit" class="btn btn-danger">
+                            Confirm Delete
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

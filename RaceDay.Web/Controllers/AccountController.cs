@@ -1,4 +1,5 @@
 ﻿
+using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -36,14 +37,13 @@ namespace RaceDay.Web.Controllers
                 model.Email,
                 PasswordHash = model.Password,
                 model.Role,
-                model.PhoneNumber
+                PhoneNumber = model.PhoneNumber ?? string.Empty
             };
 
             try
             {
                 using var response = await _apiService.PostAsync(
-                    "api/auth/register",
-                    registrationData);
+                    "api/auth/register", registrationData);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -53,13 +53,9 @@ namespace RaceDay.Web.Controllers
                     return RedirectToAction(nameof(Login));
                 }
 
-                var error = await response.Content.ReadAsStringAsync();
-
                 ModelState.AddModelError(
                     string.Empty,
-                    string.IsNullOrWhiteSpace(error)
-                        ? "Registration failed. Please check your details."
-                        : error);
+                    "Registration failed. Please check your details.");
             }
             catch (HttpRequestException)
             {
@@ -80,8 +76,7 @@ namespace RaceDay.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(
-            string email,
-            string password)
+            string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(password))
@@ -102,8 +97,7 @@ namespace RaceDay.Web.Controllers
                 };
 
                 using var response = await _apiService.PostAsync(
-                    "api/auth/login",
-                    loginData);
+                    "api/auth/login", loginData);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -112,6 +106,21 @@ namespace RaceDay.Web.Controllers
                         "Login failed. Please check your email and password.");
 
                     return View();
+                }
+
+                // Capture the API session cookie.
+                if (response.Headers.TryGetValues(
+                    "Set-Cookie", out var cookies))
+                {
+                    var setCookie = cookies.FirstOrDefault();
+
+                    if (!string.IsNullOrWhiteSpace(setCookie))
+                    {
+                        var apiCookie = setCookie.Split(';')[0];
+
+                        HttpContext.Session.SetString(
+                            "ApiCookie", apiCookie);
+                    }
                 }
 
                 using var json = await JsonDocument.ParseAsync(
@@ -164,23 +173,23 @@ namespace RaceDay.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
+            // Send logout to the API before clearing local session.
+            var apiCookie = HttpContext.Session.GetString("ApiCookie");
 
             try
             {
                 using var response = await _apiService.PostAsync(
-                    "api/auth/logout",
-                    new { });
-
-                // The MVC session has already been cleared.
-                // The API logout request is best-effort.
+                    "api/auth/logout", new { }, apiCookie);
             }
             catch (HttpRequestException)
             {
-                // The local MVC session remains cleared.
+                // Still allow the user to log out locally.
             }
+
+            HttpContext.Session.Clear();
 
             return RedirectToAction("Index", "Home");
         }
     }
 }
+

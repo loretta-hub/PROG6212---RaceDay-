@@ -26,6 +26,20 @@
 
     </div>
 
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
     @if (ViewBag.Error != null)
     {
         <div class="alert alert-danger">
@@ -78,9 +92,28 @@
 
                             <a asp-action="Details"
                                asp-route-id="@item.EventID"
-                               class="btn btn-outline-primary w-100">
+                               class="btn btn-outline-primary w-100 mb-2">
                                 View Event
                             </a>
+
+                            @if (ViewBag.Role == "Organiser")
+                            {
+                                <div class="d-flex gap-2">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.EventID"
+                                       class="btn btn-primary btn-sm flex-fill">
+                                        Edit Event
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.EventID"
+                                       class="btn btn-danger btn-sm flex-fill">
+                                        Delete Event
+                                    </a>
+
+                                </div>
+                            }
 
                         </div>
                     </div>
