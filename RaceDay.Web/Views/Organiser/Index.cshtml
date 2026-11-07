@@ -1,9 +1,12 @@
-﻿@{
+﻿@model RaceDay.Web.Controllers.OrganiserDashboardViewModel
+
+@{
     ViewData["Title"] = "Organiser Dashboard";
 }
 
 <div class="container py-5">
 
+    <!-- Dashboard Heading -->
     <div class="mb-5">
         <h1 class="fw-bold">Organiser Dashboard</h1>
 
@@ -13,13 +16,56 @@
         </p>
     </div>
 
-    <div class="row g-4">
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <!-- Dashboard Statistics -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="text-muted">Total Events Created</h5>
+                    <h1 class="fw-bold text-primary">
+                        @Model.TotalEvents
+                    </h1>
+                    <p class="text-muted mb-0">
+                        Events created by you
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="text-muted">Total Enrolments</h5>
+                    <h1 class="fw-bold text-success">
+                        @Model.TotalEnrolments
+                    </h1>
+                    <p class="text-muted mb-0">
+                        Participants in your events
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick Links -->
+    <h3 class="fw-bold mb-4">Quick Links</h3>
+
+    <div class="row g-4 mb-5">
 
         <!-- Events -->
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> Events</h4>
+                    <h4 class="fw-bold">Events</h4>
 
                     <p class="text-muted">
                         Create, update and manage running,
@@ -39,14 +85,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> Categories</h4>
+                    <h4 class="fw-bold">Categories</h4>
 
                     <p class="text-muted">
                         Manage event categories and
                         participant options.
                     </p>
 
-                    <a href="#"
+                    <a asp-controller="Categories"
+                       asp-action="Index"
                        class="btn btn-outline-primary">
                         Manage Categories
                     </a>
@@ -58,14 +105,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> Enrolments</h4>
+                    <h4 class="fw-bold">Enrolments</h4>
 
                     <p class="text-muted">
                         View participants who have
                         entered your events.
                     </p>
 
-                    <a href="#"
+                    <a asp-controller="Enrolments"
+                       asp-action="Index"
                        class="btn btn-outline-primary">
                         View Enrolments
                     </a>
@@ -77,13 +125,14 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold">🏆 Results</h4>
+                    <h4 class="fw-bold">Results</h4>
 
                     <p class="text-muted">
                         Capture and publish event results.
                     </p>
 
-                    <a href="#"
+                    <a asp-controller="Results"
+                       asp-action="Index"
                        class="btn btn-outline-primary">
                         Manage Results
                     </a>
@@ -92,4 +141,57 @@
         </div>
 
     </div>
+
+    <!-- Upcoming Events -->
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body p-4">
+
+            <h3 class="fw-bold mb-4">Upcoming Events</h3>
+
+            @if (Model.UpcomingEvents != null &&
+                        Model.UpcomingEvents.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover table-striped">
+
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Distance (km)</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.UpcomingEvents)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>
+                                        @item.EventDate.ToString("dd MMM yyyy")
+                                    </td>
+                                    <td>@item.Location</td>
+                                    <td>@item.Distance</td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">
+                    No upcoming events available.
+                </p>
+            }
+
+        </div>
+
+    </div>
+
 </div>

@@ -1,11 +1,12 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RaceDay.Web.Models
 {
     public class EventViewModel
     {
         public int EventID { get; set; }
+
+        public int OrganiserID { get; set; }
 
         [Required]
         [Display(Name = "Event Name")]
@@ -41,3 +42,4 @@ namespace RaceDay.Web.Models
         public string TypeName { get; set; } = string.Empty;
     }
 }
+
