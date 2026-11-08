@@ -19,15 +19,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> Browse Events</h4>
+                    <h4 class="fw-bold">Browse Events</h4>
 
                     <p class="text-muted">
                         Explore upcoming running, walking
                         and cycling events.
                     </p>
 
-                    <a asp-controller="Events"
-                       asp-action="Index"
+                    <a asp-controller="Participant"
+                       asp-action="BrowseEvents"
                        class="btn btn-primary">
                         Explore Events
                     </a>
@@ -39,14 +39,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> My Enrolments</h4>
+                    <h4 class="fw-bold">My Enrolments</h4>
 
                     <p class="text-muted">
                         View the events you have entered
                         and check your enrolment details.
                     </p>
 
-                    <a href="#"
+                    <a asp-controller="Participant"
+                       asp-action="MyEnrolments"
                        class="btn btn-outline-primary">
                         View Enrolments
                     </a>
@@ -58,14 +59,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> My Results</h4>
+                    <h4 class="fw-bold">My Results</h4>
 
                     <p class="text-muted">
                         View your published event results
                         and achievements.
                     </p>
 
-                    <a href="#"
+                    <a asp-controller="Participant"
+                       asp-action="MyResults"
                        class="btn btn-outline-primary">
                         View Results
                     </a>
@@ -77,14 +79,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold"> My Profile</h4>
+                    <h4 class="fw-bold">My Profile</h4>
 
                     <p class="text-muted">
                         View and update your personal
                         account information.
                     </p>
 
-                    <a href="#"
+                    <a asp-controller="Participant"
+                       asp-action="Profile"
                        class="btn btn-outline-primary">
                         Manage Profile
                     </a>
