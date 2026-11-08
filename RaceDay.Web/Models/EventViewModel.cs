@@ -33,6 +33,9 @@ namespace RaceDay.Web.Models
         public int EventTypeID { get; set; }
 
         public List<EventTypeOption> EventTypes { get; set; } = new();
+
+        // Categories available for this event
+        public List<CategoryOption> Categories { get; set; } = new();
     }
 
     public class EventTypeOption
@@ -41,5 +44,13 @@ namespace RaceDay.Web.Models
 
         public string TypeName { get; set; } = string.Empty;
     }
-}
 
+    public class CategoryOption
+    {
+        public int CategoryID { get; set; }
+
+        public string CategoryName { get; set; } = string.Empty;
+
+        public string? Description { get; set; }
+    }
+}

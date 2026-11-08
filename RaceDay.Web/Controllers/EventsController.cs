@@ -1,80 +1,83 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using RaceDay.Web.Models;
 using RaceDay.Web.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RaceDay.Web.Controllers
 {
     public class EventsController : Controller
     {
-        private readonly RaceDayApiService _apiService;
+        private readonly RaceDayApiService _eventsApi;
 
         public EventsController(RaceDayApiService apiService)
         {
-            _apiService = apiService;
+            _eventsApi = apiService;
         }
 
+        // Display all events
         public async Task<IActionResult> Index()
         {
-            if (HttpContext.Session.GetInt32("UserID") == null)
-                return RedirectToAction("Login", "Account");
+            var cookie = HttpContext.Session.GetString("ApiCookie");
 
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
-
-                var events = await _apiService.GetAsync<List<EventViewModel>>(
-                    "api/events", apiCookie);
+                var events = await _eventsApi.GetAsync<List<EventViewModel>>(
+                    "api/events", cookie);
 
                 ViewBag.Role = HttpContext.Session.GetString("Role");
 
                 return View(events ?? new List<EventViewModel>());
             }
-            catch (HttpRequestException)
+            catch
             {
-                ViewBag.Error = "Unable to load events. Please try again.";
+                ViewBag.Error = "Unable to load events.";
                 return View(new List<EventViewModel>());
             }
         }
 
+        // Display event details and categories
         public async Task<IActionResult> Details(int id)
         {
-            if (HttpContext.Session.GetInt32("UserID") == null)
-                return RedirectToAction("Login", "Account");
+            var cookie = HttpContext.Session.GetString("ApiCookie");
 
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
-
-                var eventItem = await _apiService.GetAsync<EventViewModel>(
-                    $"api/events/{id}", apiCookie);
+                var eventItem = await _eventsApi.GetAsync<EventViewModel>(
+                    $"api/events/{id}", cookie);
 
                 if (eventItem == null)
                     return NotFound();
 
+                eventItem.Categories =
+                    await _eventsApi.GetAsync<List<CategoryOption>>(
+                        $"api/events/{id}/categories", cookie)
+                    ?? new List<CategoryOption>();
+
                 return View(eventItem);
             }
-            catch (HttpRequestException)
+            catch
             {
                 return NotFound();
             }
         }
 
+        // Display create form
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             if (HttpContext.Session.GetString("Role") != "Organiser")
                 return RedirectToAction("Login", "Account");
 
-            var model = new EventViewModel
-            {
-                EventDate = DateTime.Today.AddDays(1)
-            };
-
+            var model = new EventViewModel();
             await LoadEventTypes(model);
 
             return View(model);
         }
 
+        // Save new event
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EventViewModel model)
@@ -88,73 +91,57 @@ namespace RaceDay.Web.Controllers
                 return View(model);
             }
 
-            var eventData = new
-            {
-                model.Name,
-                model.Description,
-                model.EventDate,
-                model.Location,
-                model.Distance,
-                model.EventTypeID
-            };
+            var cookie = HttpContext.Session.GetString("ApiCookie");
 
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
+                await _eventsApi.PostAsync("api/events", new
+                {
+                    model.Name,
+                    model.Description,
+                    model.EventDate,
+                    model.Location,
+                    model.Distance,
+                    model.EventTypeID
+                }, cookie);
 
-                using var response = await _apiService.PostAsync(
-                    "api/events", eventData, apiCookie);
-
-                if (response.IsSuccessStatusCode)
-                    return RedirectToAction(nameof(Index));
-
-                ModelState.AddModelError(
-                    string.Empty,
-                    "The API could not create the event. Check the details and try again.");
-
-                await LoadEventTypes(model);
-                return View(model);
+                return RedirectToAction(nameof(Index));
             }
-            catch (HttpRequestException)
+            catch
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Could not connect to the RaceDay API.");
-
+                ModelState.AddModelError("", "Unable to create event.");
                 await LoadEventTypes(model);
                 return View(model);
             }
         }
 
-        // EDIT EVENT
-
+        // Display edit form
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             if (HttpContext.Session.GetString("Role") != "Organiser")
                 return RedirectToAction("Login", "Account");
 
+            var cookie = HttpContext.Session.GetString("ApiCookie");
+
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
+                var model = await _eventsApi.GetAsync<EventViewModel>(
+                    $"api/events/{id}", cookie);
 
-                var eventItem = await _apiService.GetAsync<EventViewModel>(
-                    $"api/events/{id}", apiCookie);
-
-                if (eventItem == null)
+                if (model == null)
                     return NotFound();
 
-                await LoadEventTypes(eventItem);
-
-                return View(eventItem);
+                await LoadEventTypes(model);
+                return View(model);
             }
-            catch (HttpRequestException)
+            catch
             {
-                TempData["Error"] = "Unable to load the event for editing.";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
         }
 
+        // Update event
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EventViewModel model)
@@ -168,109 +155,85 @@ namespace RaceDay.Web.Controllers
                 return View(model);
             }
 
-            var eventData = new
-            {
-                model.Name,
-                model.Description,
-                model.EventDate,
-                model.Location,
-                model.Distance,
-                model.EventTypeID
-            };
+            var cookie = HttpContext.Session.GetString("ApiCookie");
 
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
-
-                using var response = await _apiService.PutAsync(
-                    $"api/events/{id}", eventData, apiCookie);
-
-                if (response.IsSuccessStatusCode)
+                await _eventsApi.PutAsync($"api/events/{id}", new
                 {
-                    TempData["Success"] = "Event updated successfully.";
-                    return RedirectToAction(nameof(Index));
-                }
+                    model.Name,
+                    model.Description,
+                    model.EventDate,
+                    model.Location,
+                    model.Distance,
+                    model.EventTypeID
+                }, cookie);
 
-                ModelState.AddModelError(
-                    string.Empty,
-                    "The API could not update the event. Please check the details.");
-
-                await LoadEventTypes(model);
-                return View(model);
+                return RedirectToAction(nameof(Index));
             }
-            catch (HttpRequestException)
+            catch
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Could not connect to the RaceDay API.");
-
+                ModelState.AddModelError("", "Unable to update event.");
                 await LoadEventTypes(model);
                 return View(model);
             }
         }
 
-        // DELETE EVENT
-
+        // Display delete confirmation
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             if (HttpContext.Session.GetString("Role") != "Organiser")
                 return RedirectToAction("Login", "Account");
 
+            var cookie = HttpContext.Session.GetString("ApiCookie");
+
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
+                var model = await _eventsApi.GetAsync<EventViewModel>(
+                    $"api/events/{id}", cookie);
 
-                var eventItem = await _apiService.GetAsync<EventViewModel>(
-                    $"api/events/{id}", apiCookie);
-
-                if (eventItem == null)
+                if (model == null)
                     return NotFound();
 
-                return View(eventItem);
+                return View(model);
             }
-            catch (HttpRequestException)
+            catch
             {
-                TempData["Error"] = "Unable to load the event.";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
         }
 
-        [HttpPost]
+        // Delete event
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (HttpContext.Session.GetString("Role") != "Organiser")
                 return RedirectToAction("Login", "Account");
 
+            var cookie = HttpContext.Session.GetString("ApiCookie");
+
             try
             {
-                var apiCookie = HttpContext.Session.GetString("ApiCookie");
-
-                using var response = await _apiService.DeleteAsync(
-                    $"api/events/{id}", apiCookie);
-
-                if (response.IsSuccessStatusCode)
-                    TempData["Success"] = "Event deleted successfully.";
-                else
-                    TempData["Error"] = "The event could not be deleted.";
-
+                await _eventsApi.DeleteAsync($"api/events/{id}", cookie);
                 return RedirectToAction(nameof(Index));
             }
-            catch (HttpRequestException)
+            catch
             {
-                TempData["Error"] = "Could not connect to the RaceDay API.";
+                ModelState.AddModelError("", "Unable to delete event.");
                 return RedirectToAction(nameof(Index));
             }
         }
 
+        // Load event types
         private async Task LoadEventTypes(EventViewModel model)
         {
-            var apiCookie = HttpContext.Session.GetString("ApiCookie");
+            var cookie = HttpContext.Session.GetString("ApiCookie");
 
             model.EventTypes =
-                await _apiService.GetAsync<List<EventTypeOption>>(
-                    "api/events/types", apiCookie)
+                await _eventsApi.GetAsync<List<EventTypeOption>>(
+                    "api/events/types", cookie)
                 ?? new List<EventTypeOption>();
         }
     }
