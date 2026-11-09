@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using RaceDay.Web.Services;
 using System.Net.Http;
 
@@ -14,9 +15,9 @@ namespace RaceDay.Web.Controllers
             _api = api;
         }
 
+        // ORGANISER DASHBOARD
         public async Task<IActionResult> Index()
         {
-            // Check whether the user is logged in as an organiser.
             var userId = HttpContext.Session.GetInt32("UserID");
             var role = HttpContext.Session.GetString("Role");
 
@@ -51,10 +52,9 @@ namespace RaceDay.Web.Controllers
                         "api/enrolments", apiCookie)
                     ?? new List<DashboardEnrolmentDto>();
 
-                // Count events belonging to this organiser.
                 dashboard.TotalEvents = organiserEvents.Count;
 
-                // Count enrolments belonging to this organiser's events.
+                // Count enrolments for this organiser's events.
                 var organiserEventIds = organiserEvents
                     .Select(e => e.EventID)
                     .ToHashSet();
@@ -82,9 +82,66 @@ namespace RaceDay.Web.Controllers
 
             return View(dashboard);
         }
+
+        // UPLOAD EVENT BANNER
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadEventBanner(
+            int eventId, IFormFile file)
+        {
+            var userId = HttpContext.Session.GetInt32("UserID");
+            var role = HttpContext.Session.GetString("Role");
+
+            if (userId == null || role != "Organiser")
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                TempData["Error"] = "Please select an image.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (file.Length > 5 * 1024 * 1024)
+            {
+                TempData["Error"] =
+                    "The image must not exceed 5 MB.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var apiCookie =
+                HttpContext.Session.GetString("ApiCookie");
+
+            try
+            {
+                using var response = await _api.UploadFileAsync(
+                    $"api/events/{eventId}/banner",
+                    file,
+                    apiCookie);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] =
+                        "Event banner uploaded successfully.";
+                }
+                else
+                {
+                    TempData["Error"] =
+                        "Unable to upload the banner. Please check your event and image.";
+                }
+            }
+            catch
+            {
+                TempData["Error"] =
+                    "An error occurred while uploading the event banner.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 
-    // Dashboard View Model
+    // DASHBOARD VIEW MODEL
     public class OrganiserDashboardViewModel
     {
         public int TotalEvents { get; set; }
@@ -95,7 +152,7 @@ namespace RaceDay.Web.Controllers
             = new List<DashboardEventDto>();
     }
 
-    // Event information returned by the API
+    // EVENT INFORMATION RETURNED BY THE API
     public class DashboardEventDto
     {
         public int EventID { get; set; }
@@ -111,7 +168,7 @@ namespace RaceDay.Web.Controllers
         public decimal Distance { get; set; }
     }
 
-    // Enrolment information returned by the API
+    // ENROLMENT INFORMATION RETURNED BY THE API
     public class DashboardEnrolmentDto
     {
         public int EnrolmentID { get; set; }
@@ -119,4 +176,3 @@ namespace RaceDay.Web.Controllers
         public int EventID { get; set; }
     }
 }
-

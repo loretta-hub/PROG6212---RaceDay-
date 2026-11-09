@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Data;
@@ -13,10 +14,14 @@ namespace RaceDay.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly RaceDayDbContext _context;
+        private readonly BlobStorageService _blobStorage;
 
-        public UsersController(RaceDayDbContext context)
+        public UsersController(
+            RaceDayDbContext context,
+            BlobStorageService blobStorage)
         {
             _context = context;
+            _blobStorage = blobStorage;
         }
 
         // GET: api/users/profile
@@ -33,7 +38,6 @@ namespace RaceDay.API.Controllers
             if (user == null)
                 return NotFound("User not found.");
 
-            // Never return the password hash.
             return Ok(new
             {
                 user.UserID,
@@ -42,6 +46,7 @@ namespace RaceDay.API.Controllers
                 user.Email,
                 user.Role,
                 user.PhoneNumber,
+                user.ProfilePictureUrl,
                 user.CreatedAt
             });
         }
@@ -86,8 +91,61 @@ namespace RaceDay.API.Controllers
                 user.LastName,
                 user.Email,
                 user.Role,
-                user.PhoneNumber
+                user.PhoneNumber,
+                user.ProfilePictureUrl
             });
+        }
+
+        // POST: api/users/profile-picture
+        [HttpPost("profile-picture")]
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(5 * 1024 * 1024)]
+        public async Task<IActionResult> UploadProfilePicture(
+            IFormFile file)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserID");
+
+            if (userId == null)
+                return Unauthorized("Please log in first.");
+
+            string? role = HttpContext.Session.GetString("Role");
+
+            if (role != "Participant")
+                return Forbid();
+
+            if (file == null || file.Length == 0)
+                return BadRequest("Please select an image.");
+
+            var user = await _context.Users.FindAsync(userId.Value);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            try
+            {
+                string imageUrl =
+                    await _blobStorage.UploadImageAsync(
+                        file, "profile-pictures");
+
+                user.ProfilePictureUrl = imageUrl;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Profile picture uploaded successfully.",
+                    user.ProfilePictureUrl
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(
+                    500, "Unable to upload the profile picture.");
+            }
         }
     }
 

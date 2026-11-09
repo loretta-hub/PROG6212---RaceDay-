@@ -1,13 +1,15 @@
 ﻿
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RaceDay.API.Controllers;
 using RaceDay.API.Data;
 using RaceDay.API.Models;
+using RaceDay.API.Services;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RaceDay.API.Tests
@@ -26,7 +28,17 @@ namespace RaceDay.API.Tests
         private static EventsController CreateController(
             RaceDayDbContext db)
         {
-            var controller = new EventsController(db);
+            var configuration = new ConfigurationBuilder()
+    .AddInMemoryCollection(new Dictionary<string, string?>
+    {
+        ["AzureBlobStorage:ConnectionString"] = "UseDevelopmentStorage=true",
+        ["AzureBlobStorage:ContainerName"] = "raceday-images"
+    })
+    .Build();
+
+            var blobStorage = new BlobStorageService(configuration);
+
+            var controller = new EventsController(db, blobStorage);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Session = new TestSession();

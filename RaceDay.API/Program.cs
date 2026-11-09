@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Data;
 using RaceDay.API.Services;
@@ -27,32 +26,35 @@ builder.Services.AddDbContext<RaceDayDbContext>(options =>
 // 5. Register the authentication service
 builder.Services.AddScoped<AuthService>();
 
-// 6. Enable controllers
+// 6. Register the Azure Blob Storage service
+builder.Services.AddScoped<BlobStorageService>();
+
+// 7. Enable controllers
 builder.Services.AddControllers();
 
-// 7. Enable Swagger
+// 8. Enable Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 8. Configure Swagger
+// 9. Configure Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// 9. Enable HTTPS
+// 10. Enable HTTPS
 app.UseHttpsRedirection();
 
-// 10. Enable sessions
+// 11. Enable sessions
 app.UseSession();
 
-// 11. Enable authorization middleware
+// 12. Enable authorization middleware
 app.UseAuthorization();
 
-// 12. Map API controllers
+// 13. Map API controllers
 app.MapControllers();
 
 app.Run();

@@ -5,7 +5,9 @@
 }
 
 <div class="container mt-4">
+
     <h2 class="mb-3">Browse Available Events</h2>
+
     <p class="text-muted">
         Explore upcoming running, walking and cycling events.
     </p>
@@ -17,6 +19,34 @@
         </div>
     }
 
+    <!-- SEARCH AND FILTER -->
+    <div class="row mb-4 g-3">
+
+        <div class="col-md-8">
+            <label for="eventSearch" class="form-label">
+                Search Events
+            </label>
+
+            <input type="text"
+                   id="eventSearch"
+                   class="form-control"
+                   placeholder="Search by event name, location or description..." />
+        </div>
+
+        <div class="col-md-4">
+            <label for="dateFilter" class="form-label">
+                Filter by Date
+            </label>
+
+            <select id="dateFilter" class="form-select">
+                <option value="all">All Events</option>
+                <option value="upcoming">Upcoming Events</option>
+                <option value="past">Past Events</option>
+            </select>
+        </div>
+
+    </div>
+
     @if (Model == null || !Model.Any())
     {
         <div class="alert alert-info">
@@ -25,15 +55,22 @@
     }
     else
     {
-        <div class="row">
+        <div class="row" id="eventsContainer">
+
             @foreach (var item in Model)
             {
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-4 mb-4 event-card"
+                     data-search="@($"{item.Name} {item.Location} {item.Description}".ToLower())"
+                     data-date="@item.EventDate.ToString("yyyy-MM-dd")">
+
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
 
-                            <p class="card-text">
+                            <h5 class="card-title">
+                                @item.Name
+                            </h5>
+
+                            <p class="card-text text-muted">
                                 @item.Description
                             </p>
 
@@ -51,10 +88,80 @@
                                 <strong>Distance:</strong>
                                 @item.Distance km
                             </p>
+
+                            <a asp-action="EventDetails"
+                               asp-route-id="@item.EventID"
+                               class="btn btn-primary mt-2">
+                                View Details
+                            </a>
+
                         </div>
                     </div>
                 </div>
             }
+
+        </div>
+
+        <div id="noEventsMessage"
+             class="alert alert-warning"
+             style="display:none;">
+            No events match your search or selected filter.
         </div>
     }
+
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput = document.getElementById("eventSearch");
+        const dateFilter = document.getElementById("dateFilter");
+        const eventCards = document.querySelectorAll(".event-card");
+        const noEventsMessage = document.getElementById("noEventsMessage");
+
+        function filterEvents() {
+
+            const searchValue = searchInput.value.toLowerCase().trim();
+            const selectedDate = dateFilter.value;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let visibleCount = 0;
+
+            eventCards.forEach(function (card) {
+
+                const searchText = card.dataset.search;
+                const eventDate = new Date(card.dataset.date + "T00:00:00");
+
+                const matchesSearch = searchText.includes(searchValue);
+
+                let matchesDate = true;
+
+                if (selectedDate === "upcoming") {
+                    matchesDate = eventDate >= today;
+                }
+                else if (selectedDate === "past") {
+                    matchesDate = eventDate < today;
+                }
+
+                if (matchesSearch && matchesDate) {
+                    card.style.display = "";
+                    visibleCount++;
+                }
+                else {
+                    card.style.display = "none";
+                }
+            });
+
+            if (noEventsMessage) {
+                noEventsMessage.style.display =
+                    visibleCount === 0 ? "block" : "none";
+            }
+        }
+
+        searchInput.addEventListener("input", filterEvents);
+        dateFilter.addEventListener("change", filterEvents);
+
+    });
+</script>

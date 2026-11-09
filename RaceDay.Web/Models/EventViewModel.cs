@@ -26,6 +26,7 @@ namespace RaceDay.Web.Models
         [Range(0.01, 100000)]
         [Display(Name = "Distance (km)")]
         public decimal Distance { get; set; }
+        public string? BannerImageUrl { get; set; }
 
         [Required]
         [Range(1, int.MaxValue)]
@@ -52,5 +53,8 @@ namespace RaceDay.Web.Models
         public string CategoryName { get; set; } = string.Empty;
 
         public string? Description { get; set; }
+
+        [Display(Name = "Event Banner")]
+        public string? BannerImageUrl { get; set; }
     }
 }

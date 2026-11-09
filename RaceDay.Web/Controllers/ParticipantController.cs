@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using RaceDay.Web.Models;
 using RaceDay.Web.Services;
@@ -71,7 +70,7 @@ namespace RaceDay.Web.Controllers
 
             try
             {
-                await _apiService.PutAsync(
+                using var response = await _apiService.PutAsync(
                     "api/users/profile",
                     new
                     {
@@ -81,6 +80,14 @@ namespace RaceDay.Web.Controllers
                         model.PhoneNumber
                     },
                     cookie);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError(
+                        "", "Unable to update your profile.");
+
+                    return View(model);
+                }
 
                 HttpContext.Session.SetString(
                     "FirstName", model.FirstName);
@@ -169,13 +176,21 @@ namespace RaceDay.Web.Controllers
 
             try
             {
-                await _apiService.PostAsync(
+                using var response = await _apiService.PostAsync(
                     $"api/events/{eventId}/enrolments",
                     new { CategoryID = categoryId },
                     cookie);
 
-                TempData["Success"] =
-                    "You have successfully enrolled in this event!";
+                if (!response.IsSuccessStatusCode)
+                {
+                    TempData["Error"] =
+                        "Enrolment failed. You may already be enrolled or the selected category may be invalid.";
+                }
+                else
+                {
+                    TempData["Success"] =
+                        "You have successfully enrolled in this event!";
+                }
 
                 return RedirectToAction(
                     nameof(EventDetails), new { id = eventId });
@@ -183,7 +198,7 @@ namespace RaceDay.Web.Controllers
             catch
             {
                 TempData["Error"] =
-                    "Enrolment failed. You may already be enrolled or the selected category may be invalid.";
+                    "Unable to complete your enrolment.";
 
                 return RedirectToAction(
                     nameof(EventDetails), new { id = eventId });
@@ -228,17 +243,24 @@ namespace RaceDay.Web.Controllers
 
             try
             {
-                await _apiService.DeleteAsync(
+                using var response = await _apiService.DeleteAsync(
                     $"api/enrolments/{id}", cookie);
 
-                TempData["Success"] =
-                    "Your enrolment was cancelled successfully.";
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] =
+                        "Your enrolment was cancelled successfully.";
+                }
+                else
+                {
+                    TempData["Error"] =
+                        "Unable to cancel this enrolment. It may already have a recorded result.";
+                }
             }
             catch
             {
                 TempData["Error"] =
-                    "Unable to cancel this enrolment. It may already have a recorded result.";
-
+                    "Unable to cancel this enrolment.";
             }
 
             return RedirectToAction(nameof(MyEnrolments));
@@ -268,6 +290,58 @@ namespace RaceDay.Web.Controllers
 
                 return View(new List<ResultViewModel>());
             }
+        }
+
+        // UPLOAD PARTICIPANT PROFILE PICTURE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadProfilePicture(
+            IFormFile file)
+        {
+            if (!IsParticipant())
+                return RedirectToAction("Login", "Account");
+
+            if (file == null || file.Length == 0)
+            {
+                TempData["Error"] = "Please select an image.";
+                return RedirectToAction(nameof(Profile));
+            }
+
+            if (file.Length > 5 * 1024 * 1024)
+            {
+                TempData["Error"] =
+                    "The image must not exceed 5 MB.";
+
+                return RedirectToAction(nameof(Profile));
+            }
+
+            var cookie = HttpContext.Session.GetString("ApiCookie");
+
+            try
+            {
+                using var response = await _apiService.UploadFileAsync(
+                    "api/users/profile-picture",
+                    file,
+                    cookie);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    TempData["Error"] =
+                        await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    TempData["Success"] =
+                        "Your profile picture was uploaded successfully.";
+                }
+            }
+            catch
+            {
+                TempData["Error"] =
+                    "Unable to upload your profile picture.";
+            }
+
+            return RedirectToAction(nameof(Profile));
         }
 
         // CHECK PARTICIPANT ACCESS

@@ -63,6 +63,14 @@
 
                     <div class="card h-100 shadow-sm border-0 rounded-4">
 
+                        @if (!string.IsNullOrEmpty(item.BannerImageUrl))
+                        {
+                            <img src="@item.BannerImageUrl"
+                                 class="card-img-top"
+                                 alt="@item.Name banner"
+                                 style="height: 200px; object-fit: cover;" />
+                        }
+
                         <div class="card-body p-4">
 
                             <h4 class="fw-bold">
@@ -98,7 +106,7 @@
 
                             @if (ViewBag.Role == "Organiser")
                             {
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 mb-3">
 
                                     <a asp-action="Edit"
                                        asp-route-id="@item.EventID"
@@ -113,6 +121,36 @@
                                     </a>
 
                                 </div>
+
+                                <hr />
+
+                                <h6 class="fw-bold">
+                                    Event Banner
+                                </h6>
+
+                                <form asp-controller="Organiser"
+                                      asp-action="UploadEventBanner"
+                                      method="post"
+                                      enctype="multipart/form-data">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="eventId"
+                                           value="@item.EventID" />
+
+                                    <input type="file"
+                                           name="file"
+                                           class="form-control mb-2"
+                                           accept=".jpg,.jpeg,.png,.gif,.webp"
+                                           required />
+
+                                    <button type="submit"
+                                            class="btn btn-outline-success btn-sm w-100">
+                                        Upload Banner
+                                    </button>
+
+                                </form>
                             }
 
                         </div>

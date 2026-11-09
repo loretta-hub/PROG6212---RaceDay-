@@ -28,5 +28,7 @@ namespace RaceDay.API.Models
         public decimal Distance { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public string? BannerImageUrl { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Data;
@@ -13,7 +14,15 @@ namespace RaceDay.API.Controllers
     public class EventsController : ControllerBase
     {
         private readonly RaceDayDbContext _db;
-        public EventsController(RaceDayDbContext db) => _db = db;
+        private readonly BlobStorageService _blobStorage;
+
+        public EventsController(
+            RaceDayDbContext db,
+            BlobStorageService blobStorage)
+        {
+            _db = db;
+            _blobStorage = blobStorage;
+        }
 
         [HttpGet("types")]
         public async Task<IActionResult> GetEventTypes()
@@ -42,11 +51,14 @@ namespace RaceDay.API.Controllers
             return item == null ? NotFound() : Ok(item);
         }
 
+        // POST: api/events
         [HttpPost]
         [SessionAuth("Organiser")]
         public async Task<IActionResult> Create(EventRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (request.Distance <= 0)
                 return BadRequest("Distance must be greater than zero.");
 
@@ -68,19 +80,23 @@ namespace RaceDay.API.Controllers
 
             _db.Events.Add(item);
             await _db.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetById),
                 new { id = item.EventID }, item);
         }
 
+        // PUT: api/events/{id}
         [HttpPut("{id:int}")]
         [SessionAuth("Organiser")]
         public async Task<IActionResult> Update(
             int id, EventRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var item = await _db.Events.FindAsync(id);
-            if (item == null) return NotFound();
+            if (item == null)
+                return NotFound();
 
             var userId = HttpContext.Session.GetInt32("UserID");
             if (item.OrganiserID != userId)
@@ -104,18 +120,22 @@ namespace RaceDay.API.Controllers
             return Ok(item);
         }
 
+        // DELETE: api/events/{id}
         [HttpDelete("{id:int}")]
         [SessionAuth("Organiser")]
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _db.Events.FindAsync(id);
-            if (item == null) return NotFound();
+            if (item == null)
+                return NotFound();
 
             var userId = HttpContext.Session.GetInt32("UserID");
-            if (item.OrganiserID != userId) return Forbid();
+            if (item.OrganiserID != userId)
+                return Forbid();
 
             bool hasCategories = await _db.Categories
                 .AnyAsync(c => c.EventsID == id);
+
             bool hasEnrolments = await _db.Enrolments
                 .AnyAsync(e => e.EventID == id);
 
@@ -125,17 +145,74 @@ namespace RaceDay.API.Controllers
 
             _db.Events.Remove(item);
             await _db.SaveChangesAsync();
+
             return Ok(new { message = "Event deleted." });
+        }
+
+        // POST: api/events/{id}/banner
+        [HttpPost("{id:int}/banner")]
+        [SessionAuth("Organiser")]
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(5 * 1024 * 1024)]
+        public async Task<IActionResult> UploadBanner(
+            int id, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Please select an image.");
+
+            var item = await _db.Events.FindAsync(id);
+
+            if (item == null)
+                return NotFound("Event not found.");
+
+            var userId = HttpContext.Session.GetInt32("UserID");
+
+            if (item.OrganiserID != userId)
+                return Forbid();
+
+            try
+            {
+                string imageUrl =
+                    await _blobStorage.UploadImageAsync(
+                        file, "event-banners");
+
+                item.BannerImageUrl = imageUrl;
+
+                await _db.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Event banner uploaded successfully.",
+                    item.EventID,
+                    item.BannerImageUrl
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(
+                    500, "Unable to upload the event banner.");
+            }
         }
     }
 
     public class EventRequest
     {
-        [Required] public string Name { get; set; } = "";
+        [Required]
+        public string Name { get; set; } = "";
+
         public string? Description { get; set; }
+
         public DateTime EventDate { get; set; }
-        [Required] public string Location { get; set; } = "";
+
+        [Required]
+        public string Location { get; set; } = "";
+
         public decimal Distance { get; set; }
+
         public int EventTypeID { get; set; }
     }
 }

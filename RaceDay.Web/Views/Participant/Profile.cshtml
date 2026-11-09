@@ -15,6 +15,66 @@
                 Manage your personal account information.
             </p>
 
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["Error"]
+                </div>
+            }
+
+            <div class="text-center mb-4">
+                <h5>Profile Picture</h5>
+
+                @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                {
+                    <img src="@Model.ProfilePictureUrl"
+                         alt="Profile picture"
+                         class="rounded-circle mb-3"
+                         style="width: 150px; height: 150px; object-fit: cover;" />
+                }
+                else
+                {
+                    <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center mx-auto mb-3"
+                         style="width: 150px; height: 150px;">
+                        <span class="text-muted">No picture</span>
+                    </div>
+                }
+
+                <form asp-action="UploadProfilePicture"
+                      method="post"
+                      enctype="multipart/form-data">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <input type="file"
+                               name="file"
+                               class="form-control"
+                               accept=".jpg,.jpeg,.png,.gif,.webp"
+                               required />
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-primary">
+                        Upload Profile Picture
+                    </button>
+                </form>
+
+                <small class="text-muted d-block mt-2">
+                    JPG, PNG, GIF or WEBP. Maximum size: 5 MB.
+                </small>
+            </div>
+
+            <hr />
+
+            <h5 class="mb-3">Personal Information</h5>
+
             <form asp-action="Profile" method="post">
                 @Html.AntiForgeryToken()
 
