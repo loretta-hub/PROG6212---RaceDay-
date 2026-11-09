@@ -416,3 +416,40 @@ Contains automated tests used to verify selected API functionality.
 The documentation includes project planning and supporting information, such as the Entity Relationship Diagram, API Endpoint Plan and database script.
 
 Separating the API, MVC application and tests helps keep the project organised and easier to maintain.
+
+## 17. Setup and Troubleshooting
+
+### Common Setup Requirements
+
+Before running RaceDay locally, ensure that:
+- Visual Studio is installed with the ASP.NET and web development workload.
+- The .NET SDK version required by the solution is installed.
+- Microsoft SQL Server Express is installed and running.
+- The RaceDay database connection string is configured correctly.
+- The required NuGet packages have been restored.
+
+### Common Issues
+
+**Database connection error**
+
+Check that SQL Server Express is running and that the connection string points to the correct database.
+
+**API connection error**
+
+Ensure that the RaceDay API is running and that the MVC application's API base URL matches the API's current address.
+
+**Login or registration error**
+
+Check that the account exists, the selected role is correct and the API is running. Review the application or API error message for further information.
+
+**Image upload error**
+
+Check that the image is in a supported format, does not exceed the application's file-size limit and that the configured image-storage service is available.
+
+**Build errors**
+
+Restore the NuGet packages, review the error messages in Visual Studio and rebuild the solution.
+
+### Running the Application
+
+Run the RaceDay API and MVC projects using their configured launch profiles. Confirm that the API is available before testing MVC features that communicate with it.
