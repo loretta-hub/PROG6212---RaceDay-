@@ -268,3 +268,41 @@ Potential future improvements include:
 PROG6212 – Programming 2B
 
 RaceDay Event Management System
+
+## 12. Testing and Verification
+
+The RaceDay application should be tested to verify that its main features operate correctly.
+
+The following areas should be checked during testing:
+
+### Authentication
+- Register a new Organiser account.
+- Register a new Participant account.
+- Log in using valid credentials.
+- Confirm that each user is directed to the correct dashboard.
+
+### Organiser Functionality
+- Create a sporting event.
+- Update event information.
+- Delete an event.
+- View event enrolments.
+- Manage event categories.
+- Capture event results.
+- Test event banner uploads.
+
+### Participant Functionality
+- Browse available events.
+- View event details.
+- Enrol in an event.
+- View personal enrolments and results.
+- Update profile information.
+- Test profile picture uploads.
+
+### Technical Verification
+- Build the API and MVC projects.
+- Verify API communication from the MVC application.
+- Check database records after relevant operations.
+- Test image uploads using the configured storage service.
+- Review application errors and validation messages.
+
+Testing should be performed before the final project submission.
