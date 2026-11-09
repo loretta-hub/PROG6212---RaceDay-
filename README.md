@@ -367,3 +367,24 @@ Participant functionality includes:
 ### Access Control
 
 RaceDay uses session-based authentication and role checks to restrict access to protected functionality. Organiser features are intended for Organiser accounts, while participant features are intended for Participant accounts.
+## 15. Technologies and Development Tools
+
+The RaceDay application uses the following technologies and tools:
+
+| Technology / Tool | Purpose |
+|---|---|
+| C# | Main programming language used for the application. |
+| ASP.NET Core Web API | Handles application data and backend operations. |
+| ASP.NET Core MVC | Provides the user-facing web application. |
+| Entity Framework Core | Supports database operations in the API. |
+| Microsoft SQL Server | Stores RaceDay application data. |
+| Bootstrap | Supports responsive page layouts and styling. |
+| HTML and CSS | Structure and style the web pages. |
+| JavaScript | Supports client-side interactions. |
+| Azure Blob Storage | Stores uploaded profile pictures and event banner images. |
+| Visual Studio | Main development environment. |
+| Git and GitHub | Source control and project collaboration. |
+| xUnit | Used for automated unit testing. |
+| Docker | Intended for application containerisation. |
+
+These technologies work together to support the development, maintenance and operation of RaceDay.
