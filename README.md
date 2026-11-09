@@ -388,3 +388,31 @@ The RaceDay application uses the following technologies and tools:
 | Docker | Intended for application containerisation. |
 
 These technologies work together to support the development, maintenance and operation of RaceDay.
+
+## 16. Project Structure
+
+The RaceDay solution is organised into separate projects to keep the user interface, backend operations and automated tests separate.
+
+### RaceDay.API
+Contains the backend functionality, including:
+- Controllers for handling API requests.
+- Models representing application data.
+- Database context and Entity Framework Core configuration.
+- Services for application functionality, including image storage.
+- Authentication and session-based access control.
+
+### RaceDay.Web
+Contains the MVC web application, including:
+- Controllers that manage web page requests.
+- Views that display the user interface.
+- ViewModels used to transfer data between views and controllers.
+- API service classes that communicate with the backend.
+- Session-based user access and navigation.
+
+### RaceDay.API.Tests
+Contains automated tests used to verify selected API functionality.
+
+### Documentation
+The documentation includes project planning and supporting information, such as the Entity Relationship Diagram, API Endpoint Plan and database script.
+
+Separating the API, MVC application and tests helps keep the project organised and easier to maintain.
