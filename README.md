@@ -86,3 +86,185 @@ Testing helps identify errors, improve reliability and ensure that the API meets
 
 ### Development status
 The API project builds successfully. Development and testing will continue as the endpoints and supporting functionality are completed.
+
+# RaceDay – Event Management System
+
+## 1. Project Overview
+
+RaceDay is a web-based event management system developed for running, walking and cycling events in South Africa.
+
+The system provides two main user roles: Organisers and Participants.
+
+Organisers can create and manage sporting events, manage categories, view participant enrolments and capture event results. Participants can browse events, enrol in events, view their enrolments and results, and manage their profiles.
+
+## 2. Technologies Used
+
+The project uses the following technologies:
+
+- C#
+- ASP.NET Core Web API
+- ASP.NET Core MVC
+- Entity Framework Core
+- Microsoft SQL Server
+- HTML and CSS
+- Bootstrap
+- JavaScript
+- Azure Blob Storage integration
+- Git and GitHub
+
+## 3. Main System Features
+
+### Organiser Features
+
+- Organiser registration and login.
+- Organiser dashboard.
+- Create, update and delete events.
+- Manage event categories.
+- View participant enrolments.
+- Capture event results.
+- Upload event banner images.
+
+### Participant Features
+
+- Participant registration and login.
+- Participant dashboard.
+- Browse available events.
+- View event information.
+- Enrol in events.
+- View personal enrolments.
+- View event results.
+- Update profile information.
+- Upload profile pictures.
+
+## 4. Project Architecture
+
+RaceDay is divided into two main application components:
+
+**RaceDay.API**
+
+The API handles data access, authentication, event management, enrolments, categories, results and image storage operations.
+
+**RaceDay.Web**
+
+The MVC application provides the user interface. It communicates with the API through HTTP requests.
+
+The MVC application does not access the database directly. This separation helps maintain a clear distinction between the presentation layer and backend functionality.
+
+## 5. Database
+
+The application uses Microsoft SQL Server to store information such as:
+
+- Users
+- Events
+- Event types
+- Categories
+- Enrolments
+- Results
+
+The development database connection is configured in the API's `appsettings.json` file.
+
+Example local SQL Server Express connection string:
+
+```json
+"ConnectionStrings": {
+  "RaceDayConnection": "Server=.\\SQLEXPRESS;Database=RaceDay;Trusted_Connection=True;TrustServerCertificate=True;"
+}
+```
+
+Use the supplied database SQL script in the `docs` folder when setting up the database.
+
+## 6. Requirements
+
+To run the project locally, you need:
+
+- Visual Studio 2022.
+- .NET 8 SDK.
+- Microsoft SQL Server Express.
+- SQL Server Management Studio (SSMS).
+- Git.
+- Azurite for local Azure Blob Storage development and testing, where required.
+
+## 7. How to Run the Application
+
+### Step 1: Clone the repository
+
+Clone the RaceDay repository from GitHub:
+
+```bash
+git clone https://github.com/loretta-hub/PROG6212---RaceDay-.git
+```
+
+### Step 2: Open the solution
+
+Open the RaceDay solution in Visual Studio.
+
+### Step 3: Configure the database
+
+Make sure SQL Server Express is running.
+
+Check the API connection string in `appsettings.json` and ensure it matches your local SQL Server configuration.
+
+Create and prepare the RaceDay database using the supplied SQL script and the project's database setup instructions.
+
+### Step 4: Configure image storage
+
+The project includes Azure Blob Storage integration.
+
+For local development, the storage configuration can use Azurite:
+
+```json
+"AzureBlobStorage": {
+  "ConnectionString": "UseDevelopmentStorage=true",
+  "ContainerName": "raceday-images"
+}
+```
+
+Start Azurite before testing image uploads.
+
+For a real Azure deployment, configure an appropriate Azure Storage connection string securely.
+
+### Step 5: Run the projects
+
+Run both projects:
+
+1. `RaceDay.API`
+2. `RaceDay.Web`
+
+In Visual Studio, right-click the solution, select **Configure Startup Projects**, choose **Multiple startup projects**, and set both projects to Start.
+
+The API development address used in this project is:
+
+`https://localhost:7155`
+
+The MVC application provides the website interface.
+
+## 8. Authentication and Security
+
+RaceDay supports role-based access for Organisers and Participants.
+
+Passwords are hashed before being stored in the database.
+
+Session-based authentication is used to maintain login sessions and restrict access to role-specific functionality.
+
+## 9. Project Documentation
+
+The repository includes supporting documentation for the RaceDay project, including database design and API planning documents.
+
+Refer to the `docs` folder for the available project documentation.
+
+## 10. Future Improvements
+
+Potential future improvements include:
+
+- Completing Docker containerisation.
+- Deploying the application to a cloud hosting environment.
+- Expanding automated testing.
+- Further improving responsive design and user experience.
+
+## 11. Author
+
+**Loretta Mukhethwa Mamathuntsha**
+
+PROG6212 – Programming 2B
+
+RaceDay Event Management System
