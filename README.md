@@ -334,3 +334,36 @@ The MVC application sends HTTP requests to the API to perform operations. The AP
 6. The MVC application displays the result to the user.
 
 This architecture separates presentation functionality from backend processing and database operations.
+## 14. User Roles and Permissions
+
+RaceDay uses role-based access to provide different features to Organisers and Participants. Users must log in before accessing role-specific functionality.
+
+### Organiser
+
+Organisers are responsible for managing events and overseeing event participation.
+
+Organiser functionality includes:
+- Accessing the Organiser Dashboard.
+- Creating, viewing, updating and deleting events.
+- Managing event categories.
+- Viewing participant enrolments.
+- Capturing and managing event results.
+- Uploading event banner images.
+
+### Participant
+
+Participants use RaceDay to discover events and manage their participation.
+
+Participant functionality includes:
+- Accessing the Participant Dashboard.
+- Browsing available events.
+- Viewing event details and categories.
+- Enrolling in events.
+- Viewing and managing their enrolments.
+- Viewing event results.
+- Updating their profile information.
+- Uploading a profile picture.
+
+### Access Control
+
+RaceDay uses session-based authentication and role checks to restrict access to protected functionality. Organiser features are intended for Organiser accounts, while participant features are intended for Participant accounts.
