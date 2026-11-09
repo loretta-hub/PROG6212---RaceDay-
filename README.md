@@ -306,3 +306,31 @@ The following areas should be checked during testing:
 - Review application errors and validation messages.
 
 Testing should be performed before the final project submission.
+
+## 13. API Communication
+
+RaceDay uses a RESTful Web API to handle communication between the MVC application and the database.
+
+The MVC application sends HTTP requests to the API to perform operations. The API processes these requests and returns responses to the MVC application.
+
+### Main API Areas
+
+| API Area | Purpose |
+|---|---|
+| Authentication | Registration, login and logout |
+| Events | Create, retrieve, update and delete events |
+| Categories | Manage event categories |
+| Enrolments | Manage participant event enrolments |
+| Results | Capture and retrieve event results |
+| Users | Retrieve and update user profile information |
+
+### Communication Process
+
+1. A user performs an action on the MVC website.
+2. The MVC controller sends a request through the API service.
+3. The API receives and processes the request.
+4. The API communicates with the SQL Server database where necessary.
+5. The API returns a response.
+6. The MVC application displays the result to the user.
+
+This architecture separates presentation functionality from backend processing and database operations.
